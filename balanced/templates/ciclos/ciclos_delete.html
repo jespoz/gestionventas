@@ -1,0 +1,24 @@
+{% extends 'home.html' %}
+
+{% block title %}Eliminar Ciclo{% endblock %}
+{% block title_small %} eliminar ciclo de revisión{% endblock %}
+
+{% block content_balanced %}
+    <div class="panel panel-default">
+        <div class="panel-heading" style="height: 55px;">
+        </div>
+        <div class="panel-body">
+            <p>¿Estás seguro que desear eliminar {{ ciclo }}?</p>
+            <form action="{% url "ciclos_delete" pk=ciclo.id %}" method="POST">
+                {% csrf_token %}
+                <input class="btn btn-danger" type="submit" value="Si, eliminar." />
+                <a href="{% url "ciclos_list" %}" class="text-danger"><span class="span-post-icon">No, cancelar.</span></a>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_script_balanced %}
+    $('#balanced_home').removeClass('active');
+    $('#balanced_ciclos').addClass('active');
+{% endblock %}

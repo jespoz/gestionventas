@@ -1,0 +1,83 @@
+{% extends 'home.html' %}
+
+{% block title %}Proyectos{% endblock %}
+{% block title_small %} lista de proyectos{% endblock %}
+
+{% block content_balanced %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {% for group in user.groups.all %}
+                {% if group.name == 'Administrador' %}
+                    <div class="row">
+                        <div class="pull-right" style="padding-right: 15px">
+                            <a  style="color: #FFF;" class="btn btn-success" type="submit" href="{% url 'proyecto_add' %}"><i class="glyphicon glyphicon-plus" style="color: #FFF;"></i><span class="span-post-icon">Agregar</span></a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="row" style="height: 55px;"></div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="panel-body">
+            <table class="table table-resumen table-bordered table-striped table-responsive">
+                <thead>
+                    <tr>
+                        <th>Lider</th>
+                        <th>Proyecto</th>
+                        <th>Plazo</th>
+                        <th style="width: 80px;">Cumpl</th>
+                        <th>Indicador</th>
+                        {% for group in user.groups.all %}
+                            {% if group.name == 'Administrador' %}
+                                <th style="width: 20px"></th>
+                                <th style="width: 20px"></th>
+                                <th style="width: 20px"></th>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for group in user.groups.all %}
+                        {% if group.name == 'Administrador' %}
+                            {% for proyecto in object_list %}
+                                <tr>
+                                    <td>{{ proyecto.lider }}</td>
+                                    <td>{{ proyecto.titulo }}</td>
+                                    <td>{{ proyecto.fecha_plazo|date:'d/m/Y' }}</td>
+                                    <td class="text-center">
+                                        <span><img src='{{ STATIC_URL }}img/blank_badge_{{ proyecto.semaforo }}.png' width="15"> {{ proyecto.cumplimiento|floatformat:0 }} %</span>
+                                    </td>
+                                    <td>{{ proyecto.indicador }}</td>
+                                    <td class="text-center">
+                                        <a href="{% url 'proyectos_update' pk=proyecto.id %}"><img src="{{ STATIC_URL }}img/edit.png" alt="Editar Registro" width="15px"/></a>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{% url 'proyectos_delete' pk=proyecto.id %}"><img src="{{ STATIC_URL }}img/eraser.png" alt="Borrar Registro" width="15px"/></a>
+                                    </td>
+                                    <td>{% if proyecto.adjunto %}<i class="glyphicon glyphicon-paperclip"></i>{% endif %}</td>
+                                </tr>
+                            {% endfor %}
+                        {% elif group.name == 'Lider de proyecto' %}
+                            {% for proyecto in filtrado %}
+                                <tr>
+                                    <td>{{ proyecto.perfil }}</td>
+                                    <td>{{ proyecto.titulo }}</td>
+                                    <td>{{ proyecto.fecha_plazo|date:'d/m/Y' }}</td>
+                                    <td class="text-center">
+                                        <span><img src='{{ STATIC_URL }}img/blank_badge_{{ proyecto.semaforo }}.png' width="15"> {{ proyecto.cumplimiento|floatformat:0 }} %</span>
+                                    </td>
+                                    <td>{{ proyecto.indicador }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_script_balanced %}
+    $('#balanced_home').removeClass('active');
+    $('#balanced_proyectos').addClass('active');
+{% endblock %}

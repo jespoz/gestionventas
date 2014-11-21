@@ -1,0 +1,24 @@
+{% extends 'home.html' %}
+
+{% block title %}Eliminar Dimension{% endblock %}
+{% block title_small %} eliminar dimension del Balanced ScoreCard{% endblock %}
+
+{% block content_balanced %}
+    <div class="panel panel-default">
+        <div class="panel-heading" style="height: 55px;">
+        </div>
+        <div class="panel-body">
+            <p>¿Estás seguro que desear eliminar {{ dimension }}?</p>
+            <form action="{% url "dimensiones_delete" pk=dimension.id %}" method="POST">
+                {% csrf_token %}
+                <input class="btn btn-danger" type="submit" value="Si, eliminar." />
+                <a href="{% url "dimensiones_list" %}" class="text-danger"><span class="span-post-icon">No, cancelar.</span></a>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_script_balanced %}
+    $('#balanced_home').removeClass('active');
+    $('#balanced_dimensiones').addClass('active');
+{% endblock %}

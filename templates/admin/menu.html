@@ -1,0 +1,15 @@
+<ul class="nav nav-pills nav-stacked">
+    <li id="balanced_home" class="active">
+        <a href="{% url 'home' %}"><i class="glyphicon glyphicon-home"></i><span class="span-post-icon">Inicio</span></a>
+    </li>
+    {% for group in user.groups.all %}
+        {% if group.name == 'Administrador' %}
+            <li id="balanced_objetivos"><a href="{% url 'objetivos_list' %}"><i class="glyphicon glyphicon-flag"></i><span class="span-post-icon">Objetivos</span></a></li>
+            <li id="balanced_dimensiones"><a href="{% url 'dimensiones_list' %}"><i class="glyphicon glyphicon-eye-open"></i><span class="span-post-icon">Dimensiones</span></a></li>
+            <li id="balanced_ciclos"><a href="/admin/balanced/ciclo/"><i class="glyphicon glyphicon-refresh"></i><span class="span-post-icon">Ciclos</span></a></li>
+            <li id="balanced_lideres"><a href="/admin/auth/user/"><i class="fa fa-users"></i><span class="span-post-icon">Líderes</span></a></li>
+        {% endif %}
+    {% endfor %}
+    <li id="balanced_revisiones"><a href="{% url 'revisiones' %}"><i class="glyphicon glyphicon-check"></i><span class="span-post-icon">Revisiones</span></a></li>
+    <li id="balanced_proyectos"><a href="/balanced/proyectos/"><i class="glyphicon glyphicon-tasks"></i><span class="span-post-icon">Proyectos</span></a></li>
+</ul>

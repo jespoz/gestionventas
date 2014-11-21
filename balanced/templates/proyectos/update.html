@@ -1,0 +1,50 @@
+{% extends 'home.html' %}
+
+{% block title %}{% if proyecto.id %}Modificar{% else %}Crear{% endif %} Proyecto{% endblock %}
+{% block title_small %} nuevo proyecto del Balanced ScoreCard{% endblock %}
+
+{% block content_balanced %}
+    <div class="panel panel-default">
+        <div class="panel-heading" style="height: 55px;">
+        </div>
+        <div class="panel-body">
+            <form id="form" method="POST" action="{{ action }}" class="form-horizontal" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for foo in form %}
+                    <div class="form-group">
+                        <label for="{{ foo.id_for_label }}" class="col-md-2 control-label">{{ foo.label_tag }}</label>
+                        <div class="col-md-10">
+                            {% if foo.errors %}
+                                {{ foo }} <span class="text-danger">* {% for error in foo.errors %}{{ error|escape }}{% endfor %}</span>
+                            {% else %}
+                                {{ foo }}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+                <input id="button-submit" class="pull-right btn btn-warning btn-lg" type="button" value="Enviar"/>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+{% block extra_script_balanced %}
+    $('#balanced_home').removeClass('active');
+    $('#balanced_proyectos').addClass('active');
+    $('.vDateField').datepicker({ dateFormat: "dd/mm/yy" });
+    $('#id_dimension').prop('disabled', true);
+    $('#id_dimension').addClass('ui-state-disabled');
+    $('#id_objetivo').prop('disabled', true);
+    $('#id_objetivo').css('width', '100%')
+    $('#id_objetivo').addClass('ui-state-disabled');
+    $('#id_titulo').prop('disabled', true);
+    $('#id_titulo').addClass('ui-state-disabled');
+    $('#button-submit').click(function(){
+        $('#id_dimension').prop('disabled', false);
+        $('#id_objetivo').prop('disabled', false);
+        $('#id_titulo').prop('disabled', false);
+        $('#form').submit();
+    });
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'home.html' %}
+
+{% block title %}Objetivo{% endblock %}
+{% block title_small %} detalle del objetivo{% endblock %}
+
+{% block content_balanced %}
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+            <b>
+                {% for lidere in lideres %}
+                    {% if forloop.first %}{{ lidere.objetivo__ciclo }}.- {{ lidere.objetivo__objetivo }}{% endif %}
+                {% endfor %}
+            </b>
+        </div>
+        <div class="panel-body">
+            {% for foo in lideres %}
+                <div class="img-lideres">
+                    <div class="border-lideres">
+                        {% if foo.perfil__foto %}
+                            <img src="{{ MEDIA_URL }}{{ foo.perfil__foto }}" class="img-responsive"/>
+                        {% else %}
+                            <img src="{{ STATIC_URL }}img/profile.jpg" class="img-responsive"/>
+                        {% endif %}
+                    </div>
+                    <div class="foot-lideres">{{ foo.lider__username }}</div>
+                    <input type="hidden" value="{{ foo.objetivo__objetivo }}" id="objetivo"/>
+                </div>
+            {% endfor %}
+            <p></p>
+            <table class="table table-resumen table-bordered table-striped table-responsive">
+                <thead>
+                    <tr>
+                        <th>Lider</th>
+                        <th>Proyecto</th>
+                        <th>Plazo</th>
+                        <th>Cumpl</th>
+                        <th style="width: 20px"></th>
+                        <th style="width: 20px"></th>
+                        <th style="width: 20px"></th>
+                        <th style="width: 20px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for subobjetivo in subobjetivos %}
+                        <tr>
+                            <td class="{% if subobjetivo.cumplimiento >= 100 %}text-success{% else %}text-warning{% endif %}">{{ subobjetivo.perfil }}</td>
+                            <td class="{% if subobjetivo.cumplimiento >= 100 %}text-success{% else %}text-warning{% endif %}">{{ subobjetivo }}</td>
+                            <td class="{% if subobjetivo.cumplimiento >= 100 %}text-success{% else %}text-warning{% endif %}">{{ subobjetivo.fecha_plazo|date:'d/m/Y' }}</td>
+                            <td class="text-center {% if subobjetivo.cumplimiento >= 100 %}text-success{% else %}text-warning{% endif %}">{{ subobjetivo.cumplimiento|floatformat:0 }}%</td>
+                            <td class="text-center">
+                                <a href="{% url 'proyectos_update' pk=subobjetivo.id %}"><img src="{{ STATIC_URL }}img/edit.png" alt="Editar Registro" width="15px"/></a>
+                            </td>
+                            <td class="text-center">
+                                {% if subobjetivo.indicador %}
+                                    <a href=""><img src="{{ STATIC_URL }}img/chart.png" alt="Ver Indicador" width="15px"/></a>
+                                {% endif %}
+                            </td>
+                            <td>{% if subobjetivo.adjunto %}<i class="glyphicon glyphicon-paperclip"></i>{% endif %}</td>
+                            <td>{% if subobjetivo.observacion %}<i class="glyphicon glyphicon-eye-open"></i>{% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_script_balanced %}
+    $('#balanced_home').removeClass('active');
+    $('#balanced_objetivos').addClass('active');
+{% endblock %}

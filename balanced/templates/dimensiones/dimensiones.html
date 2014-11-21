@@ -1,0 +1,45 @@
+{% extends 'home.html' %}
+
+{% block title %}Dimensiones{% endblock %}
+{% block title_small %} listado de dimensiones del Balanced ScoreCard{% endblock %}
+
+{% block content_balanced %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="pull-right" style="padding-right: 15px">
+                    <a style="color: #FFF;" class="btn btn-success" type="submit" href="{% url 'dimensiones_add' %}"><i class="glyphicon glyphicon-plus" style="color: #FFF;"></i><span class="span-post-icon">Agregar</span></a>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <table class="table table-resumen table-bordered table-striped table-responsive">
+                <thead>
+                    <tr>
+                        <th>Dimensiones</th>
+                        <th style="width: 20px"></th>
+                        <th style="width: 20px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dimension in object_list %}
+                        <tr>
+                            <td>{{ dimension.dimension }}</td>
+                            <td class="text-center">
+                                <a href="{% url 'dimensiones_update' pk=dimension.id %}"><img src="{{ STATIC_URL }}img/edit.png" alt="Editar Registro" width="15px"/></a>
+                            </td>
+                            <td class="text-center">
+                                <a href="{% url "dimensiones_delete" pk=dimension.id %}"><img src="{{ STATIC_URL }}img/eraser.png" alt="Borrar Registro" width="15px"/></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_script_balanced %}
+    $('#balanced_home').removeClass('active');
+    $('#balanced_dimensiones').addClass('active');
+{% endblock %}

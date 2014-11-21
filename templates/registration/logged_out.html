@@ -1,0 +1,18 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block content %}
+
+<p>{% trans "Thanks for spending some quality time with the Web site today." %}</p>
+
+<p><a href="{% url 'login' %}">{% trans 'Log in again' %}</a></p>
+
+{% endblock %}
+
+{% block extra_script %}
+    <script>
+        $(document).ready(function(){
+            $('#column_menu').addClass('hidden');
+        });
+    </script>
+{% endblock %}

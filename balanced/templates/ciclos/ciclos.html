@@ -1,0 +1,57 @@
+{% extends 'home.html' %}
+
+{% block title %}Ciclos{% endblock %}
+{% block title_small %} listado de ciclos revisados{% endblock %}
+
+{% block content_balanced %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="pull-right" style="padding-right: 15px">
+                    <a style="color: #FFF;" class="btn btn-success" type="submit" href="{% url 'ciclos_add' %}"><i class="glyphicon glyphicon-plus" style="color: #FFF;"></i><span class="span-post-icon">Agregar</span></a>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <table class="table table-resumen table-bordered table-striped table-responsive">
+                <thead>
+                    <tr>
+                        <th>Ciclo</th>
+                        <th>Fecha Revisión</th>
+                        <th>Observaciones</th>
+                        <th>Estado</th>
+                        <th style="width: 20px"></th>
+                        <th style="width: 20px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ciclo in object_list %}
+                        <tr>
+                            <td class="text-center">{{ ciclo.clave }}</td>
+                            <td>{{ ciclo.fecha_revision|date:'M-Y' }}</td>
+                            <td>{{ ciclo.observacion }}</td>
+                            <td class="text-center">
+                                {% if ciclo.status %}
+                                    <i class="glyphicon glyphicon-ok" style="color: green;"></i>
+                                {% else %}
+                                    <i class="glyphicon glyphicon-remove" style="color: red;"></i>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                <a href="{% url 'ciclos_update' pk=ciclo.id %}"><img src="{{ STATIC_URL }}img/edit.png" alt="Editar Registro" width="15px"/></a>
+                            </td>
+                            <td class="text-center">
+                                <a href="{% url "ciclos_delete" pk=ciclo.id %}"><img src="{{ STATIC_URL }}img/eraser.png" alt="Borrar Registro" width="15px"/></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_script_balanced %}
+    $('#balanced_home').removeClass('active');
+    $('#balanced_ciclos').addClass('active');
+{% endblock %}

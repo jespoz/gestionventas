@@ -1,0 +1,20 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Gestión ventas | Sistemas{% endblock %}
+{% block extrahead %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}plugins/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}plugins/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery-ui.css"/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/customize.css"/>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <div class="container">
+        <a href="{% url 'home' %}"><img src="{{ STATIC_URL }}img/logo_header.png" alt="Agrosuper"/></a>
+    </div>
+</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

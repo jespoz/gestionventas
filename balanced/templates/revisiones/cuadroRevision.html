@@ -1,0 +1,22 @@
+<form method="POST">
+    {% csrf_token %}
+    <div class="col-md-6">
+        <h3>Cumplimiento: </h3>
+        <div class="col-sm-9" style="padding-left: 0;">
+            <input style="height: 14px; margin-top: 5%;" onchange="rangevalue.value=value + ' %'" type="range" min="0" max="100" id="id_ciclo" value="{% if proyecto.revision %}{{ proyecto.revision|floatformat:0 }}{% else %}{{ proyecto.cumplimiento|floatformat:0 }}{% endif %}"/>
+        </div>
+        <div class="col-sm-3">
+            <output id="rangevalue" style="font-size: 24px; font-family: 'Open Sans', sans-serif;">{% if proyecto.revision %}{{ proyecto.revision|floatformat:0 }}{% else %}{{ proyecto.cumplimiento|floatformat:0 }}{% endif %} %</output>
+        </div>
+    </div>
+    <div class="col-md-6" id="form-group">
+        <input type="hidden" id="proyecto" value="{{ proyecto.id }}"/>
+        <h3>Observación: </h3>
+        <textarea rows="5" style="width: 100%; resize: none;" id="observacion">{% if proyecto.observacion_revision %}{{ proyecto.observacion_revision }}{% endif %}</textarea>
+        <span class="text-danger"></span>
+    </div>
+    <div class="col-md-12">
+        <hr/>
+        <a class="btn btn-primary" data-id="{{ proyecto.id }}" style="float: right;">Actualizar</a>
+    </div>
+</form>

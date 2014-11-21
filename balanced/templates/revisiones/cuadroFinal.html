@@ -1,0 +1,21 @@
+<form method="POST">
+    {% csrf_token %}
+    <input type="hidden" id="id_proyecto" value="{{ proyecto.id }}"/>
+    <div class="row">
+        <div class="col-md-4"><h3>Nuevo cumplimiento:  </h3></div>
+        <div class="col-md-8"><h3>{% if proyecto.revision %}<div class="label label-info">{{ proyecto.revision|floatformat:0 }} %{% endif %}</div></h3></div>
+        <input type="hidden" value="{{ proyecto.revision }}" id="id_avance"/>
+    </div>
+    <div class="row">
+        <div class="col-md-4"><h3>Observación:</h3></div>
+        <div class="col-md-8">{% if proyecto.observacion_revision %}<div class="note note-success"><span>{{ proyecto.observacion_revision }}</span></div>{% endif %}</div>
+    </div>
+    <hr/>
+    <div class="row pull-right">
+        <div class="col-md-12">
+            {% if proyecto.actualizado %}
+                <button id="checkFinal" type="button" class="btn btn-success"><i class="fa fa-check"></i><span style="margin-left: 5px;">Revisado</span></button>
+            {% endif %}
+        </div>
+    </div>
+</form>

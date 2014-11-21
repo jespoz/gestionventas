@@ -1,0 +1,217 @@
+{% extends 'home.html' %}
+
+{% block title %}Cuadro de mando integral{% endblock %}
+{% block title_small %}Dashboard {% endblock %}
+
+{% block content_balanced %}
+    {% for obj in dimensiones %}
+        <section>
+            <div class="row">
+                <section class="dimension col-md-4">
+                    {% if obj.objetivo__dimension__dimension == 'Clientes' %}
+                        <div class="dashboard-stat yellow">
+                            <div class="visual">
+                                <i class="fa fa-comments"></i>
+                            </div>
+                            <div class="details">
+                                <div class="number">
+                                     {{ obj.total|floatformat:1 }} %
+                                </div>
+                            </div>
+                            {% for group in user.groups.all %}
+                                {% if group.name == 'Administrador' %}
+                                    <a class="more" href="{% url 'detalle_dimension' pk=obj.objetivo__dimension__id %}">
+                                        Detalles <i class="m-icon-swapright m-icon-white"></i>
+                                        <div class="desc pull-right">
+                                             {{ obj.objetivo__dimension__dimension }}
+                                        </div>
+                                    </a>
+                                {% else %}
+                                    <div class="more" style="height: 26px;">
+                                        <div class="desc pull-right">
+                                             {{ obj.objetivo__dimension__dimension }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% elif obj.objetivo__dimension__dimension == 'Procesos' %}
+                        <div class="dashboard-stat green">
+                            <div class="visual">
+                                <i class="fa fa-cogs"></i>
+                            </div>
+                            <div class="details">
+                                <div class="number">
+                                     {{ obj.total|floatformat:1 }} %
+                                </div>
+                            </div>
+                            {% for group in user.groups.all %}
+                                {% if group.name == 'Administrador' %}
+                                    <a class="more" href="{% url 'detalle_dimension' pk=obj.objetivo__dimension__id %}">
+                                        Detalles <i class="m-icon-swapright m-icon-white"></i>
+                                        <div class="desc pull-right">
+                                             {{ obj.objetivo__dimension__dimension }}
+                                        </div>
+                                    </a>
+                                {% else %}
+                                    <div class="more" style="height: 26px;">
+                                        <div class="desc pull-right">
+                                             {{ obj.objetivo__dimension__dimension }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="dashboard-stat blue">
+                            <div class="visual">
+                                <i class="fa fa-group"></i>
+                            </div>
+                            <div class="details">
+                                <div class="number">
+                                     {{ obj.total|floatformat:1 }} %
+                                </div>
+                            </div>
+                            {% for group in user.groups.all %}
+                                {% if group.name == 'Administrador' %}
+                                    <a class="more" href="{% url 'detalle_dimension' pk=obj.objetivo__dimension__id %}">
+                                        Detalles <i class="m-icon-swapright m-icon-white"></i>
+                                        <div class="desc pull-right">
+                                             {{ obj.objetivo__dimension__dimension }}
+                                        </div>
+                                    </a>
+                                {% else %}
+                                    <div class="more" style="height: 26px;">
+                                        <div class="desc pull-right">
+                                             {{ obj.objetivo__dimension__dimension }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </section>
+                <section class="objetivos col-md-8">
+                    {% for foo in objetivos %}
+                        {% if foo.objetivo__dimension__dimension == obj.objetivo__dimension__dimension %}
+                            <article class="col-md-3">
+                                <div class="panel" style="border: none;">
+                                    <div class="panel-heading" style="background-color: {% if obj.objetivo__dimension__dimension == 'Clientes' %}#ffd367;{% elif obj.objetivo__dimension__dimension == 'Procesos' %}#80cc6e;{% else %}#5492a7;{% endif %}; color: white;">
+                                        <div class="row">
+                                            <div class="text-center col-md-6"> {{ foo.objetivo__ciclo }} </div>
+                                            <div class="col-md-6" style="padding-left: 0px;">
+                                                <span class="badge alert-{% if foo.total == 100 %}success{% else %}danger{% endif %}">{{ foo.total|floatformat:0 }}%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body text-center" style="padding-top: 9px; padding-bottom: 8px;">
+                                        {{ foo.count }} proyectos
+                                    </div>
+                                </div>
+                            </article>
+                        {% endif %} 
+                    {% endfor %}
+                </section>
+            </div>
+        </section>
+    {% endfor %}
+    <section style="margin-bottom: 20px;">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Gráfico acumulado por ciclos</div>
+            <div class="panel-body">
+                <div id="container-graph" style="min-width: 310px; height: 200px; margin: 0 auto"></div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block extra_script %}
+    <script src="{{ STATIC_URL }}plugins/highcharts/js/highcharts.js"></script>
+    <script>
+        $(function () {
+            chart_answer = new Highcharts.Chart({
+                chart: {
+                    backgroundColor: '#ffffff',
+                    borderColor: '#a2a2a1',
+                    borderWidth: 0,
+                    borderRadius: 0,
+                    renderTo: 'container-graph',
+                    type: 'line',
+                    plotBackgroundColor: '#ffffff'
+                },
+                colors: ['#3399FF'],
+                legend: {
+                    enabled: false
+                },
+                title: {
+                    text: ''
+                },
+                tooltip: {
+                    borderRadius: 0,
+                    borderWidth: 0,
+                    shadow: false,
+                    style: {
+                        fontSize: '7pt',
+                        color: '#000000'
+                    },
+                    pointFormat: '{point.y:.2f} %'
+                },
+                plotOptions: {
+                    series: {
+                        fillOpacity: 0.1
+                    },
+                    line: {
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y:.2f} %'
+                        },
+                        enableMouseTracking: false
+                    }
+                },
+                xAxis: {
+                    labels: {
+                        x: 0,
+                        y: 40,
+                        style: {
+                            color: '#333333'
+                        }
+                    },
+                    lineWidth: 1,
+                    lineColor: '#333333',
+                    minPadding: 0,
+                    maxPadding: 0,
+                    title: {
+                        text: ''
+                    }
+                },
+                yAxis: {
+                    gridLineWidth: 0,
+                    lineWidth: 1,
+                    lineColor: '#333333',
+                    min: 0,
+                    minPadding: 0,
+                    maxPadding: 0,
+                    title: {
+                        text: ''
+                    }
+                }
+            });
+
+            var datosApi = '/balanced/carga_acumulado/';
+
+            $.getJSON(datosApi, function (data) {
+                var ciclos = [];
+                var acum = [];
+                $.each(data.ciclo, function(key, val){
+                    ciclos.push('Ciclo ' + val.fields['clave']);
+                });
+                $.each(data.acumulado, function (key, val) {
+                    acum.push(val.promedio);
+                });
+                chart_answer.xAxis[0].setCategories(ciclos);
+                var series = {data: acum, color: '#3399FF'};
+                chart_answer.addSeries(series);
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'admin/base_site.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-9">
+            <h3>{% block title %}{% endblock %}<small>{% block title_small %}{% endblock %}</small></h3>
+        </div>
+        <div class="col-sm-3">
+            <a style="color: #FFF;" class="pull-right btn btn-success" href="javascript:window.history.back();"><i class="fa fa-arrow-left" style="color: #FFF;"></i> Atras...</a>
+        </div>
+        <div class="col-sm-12">
+            <hr/>
+        </div>
+    </div>
+    <br/>
+    {% block content_balanced %}{% endblock %}
+{% endblock %}
+
+{% block extra_script %}
+    <script>
+        $(function () {
+            $('#nav_resumen').removeClass('active');
+            $('#nav_balanced').addClass('active');
+        });
+        {% block extra_script_balanced %}{% endblock %}
+    </script>
+{% endblock %}
+

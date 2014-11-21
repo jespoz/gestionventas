@@ -1,0 +1,45 @@
+{% extends 'home.html' %}
+
+{% block title %}Objetivos{% endblock %}
+{% block title_small %} objetivos por dimensión{% endblock %}
+
+{% block content_balanced %}
+    <div class="row">
+        {% for foo in dimension %}
+            <div class="col-sm-{{ columnas }}">
+                <div class="panel panel-success">
+                    <div class="panel-heading text-center">{{ foo.dimension }}</div>
+                    <div class="panel-body">
+                        <p>
+                            {% for obj in objetivo %}
+                                {% if obj.objetivo__dimension__dimension == foo.dimension %}
+                                    <ul>
+                                        <li><b>{{ obj.objetivo__ciclo }}.-</b> {{ obj.objetivo__objetivo }}</li>
+                                    </ul>
+                                    <div class="well well-sm row" style="background-color: white; border: none; box-shadow: none;">
+                                        <div class="pull-left">
+                                            <div class="progress" style="min-width: 150px; margin-left: 20px;">
+                                                <div class="progress-bar progress-bar-{% if obj.total < 50 %}danger{% elif obj.total < 95 %}warning{% else %}success{% endif %}" role="progressbar" aria-valuenow="{{ obj.total|floatformat:0 }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ obj.total|floatformat:0 }}%;">
+                                                    {{ obj.total|floatformat:0 }} %
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pull-right" style="margin-right: 20px;">
+                                            <a href="{% url 'objetivos_update' pk=obj.objetivo__id %}" title="Editar Objetivo"><i class="glyphicon glyphicon-edit"></i></a>
+                                            <a href="{% url 'objetivos_view' pk=obj.objetivo__id %}" title="Ver Objetivo" class="span-post-icon"><i class="glyphicon glyphicon-search"></i></a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block extra_script_balanced %}
+    $('#balanced_home').removeClass('active');
+    $('#balanced_objetivos').addClass('active');
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'home.html' %}
+
+{% block title %}{% if ciclo.id %}Modificar{% else %}Crear{% endif %} Ciclo{% endblock %}
+{% block title_small %} nuevo ciclo de revisión{% endblock %}
+
+{% block content_balanced %}
+    <div class="panel panel-default">
+        <div class="panel-heading" style="height: 55px;">
+        </div>
+        <div class="panel-body">
+            <form method="POST" action="{{ action }}" class="form-horizontal">
+                {% csrf_token %}
+                {% for foo in form %}
+                    <div class="form-group">
+                        <label for="{{ foo.id_for_label }}" class="col-md-2 control-label">{{ foo.label_tag }}</label>
+                        <div class="col-md-10">
+                            {% if foo.errors %}
+                                {{ foo }} <span class="text-danger">* {% for error in foo.errors %}{{ error|escape }}{% endfor %}</span>
+                            {% else %}
+                                {{ foo }}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+                <input class="pull-right btn btn-warning" type="submit" value="Enviar"/>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_script_balanced %}
+    $('#balanced_home').removeClass('active');
+    $('#balanced_ciclos').addClass('active');
+    $('.vDateField').datepicker({ dateFormat: "dd/mm/yy" });
+{% endblock %}

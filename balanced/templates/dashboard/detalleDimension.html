@@ -1,0 +1,140 @@
+{% extends 'home.html' %}
+
+{% block title %}Detalle de Dimension{% endblock %}
+{% block title_small %} Dashboard{% endblock %}
+
+{% block content_balanced %}
+
+    <div class="row">
+        <section class="dimension col-md-9"></section>
+        <section class="dimension col-md-3">
+            <div class="dashboard-stat{% for foo in dimension %}{% if foo.objetivo__dimension__dimension == 'Clientes' %} yellow{% elif foo.objetivo__dimension__dimension == 'Procesos' %} green{% elif foo.objetivo__dimension__dimension == 'Personas' %} blue{% endif %}{% endfor %}" style="height: 90px;">
+                <div class="visual">
+                    <i class="fa fa-comments"></i>
+                </div>
+                <div class="details">
+                    <div class="number">
+                        {% for foo in dimension %}
+                            {{ foo.total|floatformat:1 }} %
+                        {% endfor %}
+                    </div>
+                    <div class="desc">
+                         {% for foo in dimension %}
+                            {{ foo.objetivo__dimension__dimension }}
+                         {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="panel panel-danger">
+        <div class="panel-heading text-center">
+            <b>Proyectos Abiertos</b>
+        </div>
+        <div class="panel-body">
+            <table class="table table-responsive table-bordered table-resumen table-striped">
+                <thead>
+                    <th>Obj</th>
+                    <th>Lider</th>
+                    <th>Proyecto</th>
+                    <th>Plazo</th>
+                    <th>% Cumpl</th>
+                    <th>Observaciones</th>
+                </thead>
+                <tbody>
+                    {% for foo in proyectos %}
+                        <tr id="proyectos{{ foo.id }}">
+                            <td class="text-center">{{ foo.objetivo__ciclo }}</td>
+                            <td class="text-center">{{ foo.lider__username }}</td>
+                            <td><a data-id="{{ foo.id }}" style="cursor:pointer;" title="{{ foo.titulo }}">{{ foo.titulo|truncatechars:70 }}<i class="fa fa-arrow-circle-o-down" style="color: #428bca; margin-left: 5px;"></i></a></td>
+                            <td class="text-center">{{ foo.fecha_plazo|date:'d/M/Y' }}</td>
+                            <td class="text-center">{{ foo.cumplimiento|floatformat:0 }} %</td>
+                            <td class="text-center"><i class="glyphicon glyphicon-eye-open"></i></td>
+                        </tr>
+                        <tr>
+                            <td id="tr{{ foo.id }}" colspan="3" class="text-center hidden"><article id="contenido-proyecto-{{ foo.id }}"></article></td>
+                            <td id="tr-obs{{ foo.id }}" colspan="3" class="hidden">
+                                <article id="contenido-observacion-{{ foo.id }}"></article>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="panel panel-success">
+        <div class="panel-heading text-center">
+            <b>Proyectos Cerrados</b>
+        </div>
+        <div class="panel-body">
+            <table class="table table-responsive table-bordered table-resumen table-striped">
+                <thead>
+                    <th>Obj</th>
+                    <th>Lider</th>
+                    <th>Proyecto</th>
+                    <th>Plazo</th>
+                    <th>% Cumpl</th>
+                    <th>Observaciones</th>
+                </thead>
+                <tbody>
+                    {% for foo in cerrados %}
+                        <tr id="proyectos{{ foo.id }}">
+                            <td class="text-center">{{ foo.objetivo__ciclo }}</td>
+                            <td class="text-center">{{ foo.lider__username }}</td>
+                            <td><a data-id="{{ foo.id }}" style="cursor:pointer;" title="{{ foo.titulo }}">{{ foo.titulo|truncatechars:70 }}<i class="fa fa-arrow-circle-o-down" style="color: #428bca; margin-left: 5px;"></i></a></td>
+                            <td class="text-center">{{ foo.fecha_plazo|date:'d/M/Y' }}</td>
+                            <td class="text-center">{{ foo.cumplimiento|floatformat:0 }} %</td>
+                            <td class="text-center"><i class="glyphicon glyphicon-eye-open"></i></td>
+                        </tr>
+                        <tr>
+                            <td id="tr{{ foo.id }}" colspan="3" class="text-center hidden"><article id="contenido-proyecto-{{ foo.id }}"></article></td>
+                            <td id="tr-obs{{ foo.id }}" colspan="3" class="hidden">
+                                <article id="contenido-observacion-{{ foo.id }}"></article>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header alert-info">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Agregar una observación</h4>
+                </div>
+                <div class="modal-body">
+                    <article id="observacion_new">
+                        <div id="agregar_observacion">
+                            <input id="id_proyecto" type="hidden"/>
+                            <textarea id="nueva_observacion" rows="2" style="width: 100%; resize: none;"></textarea>
+                            {% csrf_token %}
+                            <div style="margin-top: 10px;">
+                                <button type="button" class="btn btn-success">Guardar</button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalObs" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="alert alert-warning" style="padding: 30px;">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <div id="modal-title-observacion"></div>
+                <hr/>
+                <div id="modal-body-observacion"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_script %}
+    <script src="{{ STATIC_URL }}plugins/highcharts/js/highcharts.js"></script>
+    <script src="{{ STATIC_URL }}js/charts.js"></script>
+    <script src="{{ STATIC_URL }}js/observaciones.js"></script>
+{% endblock %}
