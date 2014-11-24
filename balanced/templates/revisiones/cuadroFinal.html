@@ -1,6 +1,7 @@
 <form method="POST">
     {% csrf_token %}
     <input type="hidden" id="id_proyecto" value="{{ proyecto.id }}"/>
+    <input type="hidden" id="id_ciclo" value="{{ ciclo.id }}"/>
     <div class="row">
         <div class="col-md-4"><h3>Nuevo cumplimiento:  </h3></div>
         <div class="col-md-8"><h3>{% if proyecto.revision %}<div class="label label-info">{{ proyecto.revision|floatformat:0 }} %{% endif %}</div></h3></div>
@@ -19,3 +20,6 @@
         </div>
     </div>
 </form>
+{% block extra_script %}
+    <script src="{{ STATIC_URL }}js/check.js"></script>
+{% endblock %}

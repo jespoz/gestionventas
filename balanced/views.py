@@ -275,16 +275,24 @@ def agregar_revision(request):
     else:
         raise Http404
 
+import string
+from datetime import datetime
+
 @login_required()
 def agregar_check(request):
     if request.is_ajax():
-        ciclo = Ciclo.objects.all().filter(status=False)
-        avance = Avance()
-        avance.avance = request.POST['avance']
-        avance.ciclo = ciclo
-        avance.proyecto_id = request.POST['proyecto']
-        avance.checkeado = True
+        avance = request.POST['avance']
+        avance = Avance(avance=string.replace(avance, ',', '.'), ciclo_id=request.POST['ciclo'], proyecto_id=request.POST['proyecto'], checkeado=True)
         avance.save()
+        proyecto = get_object_or_404(Proyecto, id=request.POST['proyecto'])
+        proyecto.revisado = True
+        proyecto.fecha_revision = datetime.now()
+        print 1
+        proyecto.cumplimiento = int(avance)
+        print proyecto.cumplimiento
+        proyecto.save()
+        print 3
+        return HttpResponse('revisiones')
     else:
         raise Http404
 
@@ -292,6 +300,7 @@ def agregar_check(request):
 def check_revision(request, id):
     if request.is_ajax():
         proyecto = get_object_or_404(Proyecto, id=id)
-        return render(request, 'revisiones/cuadroFinal.html', {'proyecto': proyecto})
+        ciclo = get_object_or_404(Ciclo, status=False)
+        return render(request, 'revisiones/cuadroFinal.html', {'proyecto': proyecto, 'ciclo': ciclo})
     else:
         raise Http404

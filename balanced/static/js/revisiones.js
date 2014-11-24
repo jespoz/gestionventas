@@ -12,13 +12,9 @@ function main() {
     $('[id^=contenido-proyecto-]').on('click', 'a', enviar_revision);
     $('[id^=proyectos]').on('click', 'a', cargar_revision);
     $('[id^=revision]').on('click', 'a', mostrar_revision);
-}
 
-function enviar_check(){
-    alert('Paso');
-    var proyecto = $('#id_proyecto').val();
-    var avance = $('#id_avance').val();
-    $.post('/balanced/check/add/', {proyecto: proyecto, avance: avance}, actualizar_observaciones);
+
+
 }
 
 function mostrar_revision(data){
