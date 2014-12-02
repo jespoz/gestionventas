@@ -249,7 +249,7 @@ def carga_acumulado(request):
 
 @login_required()
 def revisiones(request):
-    ciclo = Ciclo.objects.values('clave', 'id').filter(status=False)
+    ciclo = Ciclo.objects.values('clave').filter(status=False)
     proyecto_filtrado = Proyecto.objects.all().filter(lider__username=request.user.username).filter(abierto=1)
     proyecto = Proyecto.objects.all()
     return render_to_response('revisiones/revisiones.html', {'ciclo': ciclo, 'proyecto': proyecto, 'filtrado': proyecto_filtrado}, context_instance=RequestContext(request))
@@ -271,8 +271,6 @@ def agregar_revision(request):
         proyecto.observacion_revision = request.POST['obs']
         proyecto.actualizado = True
         proyecto.save()
-        observacion = Observacion(proyecto_id=request.POST['proyecto'], usuario_id=request.user.id, observacion=request.POST['obs'])
-        observacion.save()
         return HttpResponse('revisiones')
     else:
         raise Http404
@@ -284,41 +282,16 @@ from datetime import datetime
 def agregar_check(request):
     if request.is_ajax():
         avance = request.POST['avance']
-        avances = Avance(avance=string.replace(avance, ',', '.'), ciclo_id=request.POST['ciclo'], proyecto_id=request.POST['proyecto'], checkeado=True)
-        avances.save()
-        for p in Proyecto.objects.filter(id=request.POST['proyecto']):
-            p.revisado = True
-            p.fecha_revision = datetime.now()
-            p.cumplimiento = string.replace(avance, ',', '.')
-            p.save()
-
-        return HttpResponse('revisiones')
-    else:
-        raise Http404
-
-@login_required()
-def agregar_check_full(request):
-    if request.is_ajax():
-        avance = request.POST['avance']
-        avances = Avance(avance=string.replace(avance, ',', '.'), ciclo_id=request.POST['ciclo'], proyecto_id=request.POST['proyecto'], checkeado=True)
-        avances.save()
-        for p in Proyecto.objects.filter(id=request.POST['proyecto']):
-            p.revisado = True
-            p.fecha_revision = datetime.now()
-            p.cumplimiento = string.replace(avance, ',', '.')
-            p.save()
-        clean_proyectos = Proyecto.objects.all()
-        clean_proyectos.revisado = 0
-        clean_proyectos.actualizado = 0
-        clean_proyectos.observacion_revision = ''
-        clean_proyectos.fecha_revision = ''
-        clean_proyectos.save()
-        print 'actualizo proyectos'
-        ciclo = get_object_or_404(Ciclo, id=request.POST['ciclo'])
-        ciclo.status = 1
-        ciclo.save()
-        print 'grabo ciclo'
-
+        avance = Avance(avance=string.replace(avance, ',', '.'), ciclo_id=request.POST['ciclo'], proyecto_id=request.POST['proyecto'], checkeado=True)
+        avance.save()
+        proyecto = get_object_or_404(Proyecto, id=request.POST['proyecto'])
+        proyecto.revisado = True
+        proyecto.fecha_revision = datetime.now()
+        print 1
+        proyecto.cumplimiento = int(avance)
+        print proyecto.cumplimiento
+        proyecto.save()
+        print 3
         return HttpResponse('revisiones')
     else:
         raise Http404
