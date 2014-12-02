@@ -29,4 +29,5 @@ urlpatterns = patterns('',
     url(r'^revisiones/add/$', 'balanced.views.agregar_revision', name='revisiones_add'),
     url(r'^carga_check/(?P<id>\d+)/$', 'balanced.views.check_revision', name='check'),
     url(r'^check/add/$', 'balanced.views.agregar_check', name='check_add'),
+    url(r'^check/add/full/$', 'balanced.views.agregar_check_full', name='check_add_full'),
 )
