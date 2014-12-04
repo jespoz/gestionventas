@@ -11,7 +11,7 @@
     </div>
     <div class="col-md-6" id="form-group">
         <input type="hidden" id="proyecto" value="{{ proyecto.id }}"/>
-        <h3>Observación: </h3>
+        <h3>Observación: <span class="text-danger">*</span></h3>
         <textarea rows="5" style="width: 100%; resize: none;" id="observacion">{% if proyecto.observacion_revision %}{{ proyecto.observacion_revision }}{% endif %}</textarea>
         <span class="text-danger"></span>
     </div>

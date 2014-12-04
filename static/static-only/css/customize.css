@@ -29,9 +29,6 @@ letter-spacing 1px.active > a {
 textarea {
   width: 100%;
 }
-th {
-  padding: 5px !important;
-}
 ul {
   list-style: none;
   padding-left: 20px;
@@ -80,11 +77,6 @@ ul li {
 .content-breadcrumbs {
   font-size: 12px;
   padding: 3px 0px 3px 5%;
-}
-.col-md-10 > h1 {
-    font-family: "Open Sans",sans-serif;
-    margin-top: 0px;
-    font-size: 24px;
 }
 .dashboard-stat {
   margin-bottom: 25px;
@@ -169,9 +161,6 @@ ul li {
   margin-left: 10px;
   outline: 1px solid #bfbfbf;
 }
-.modal-backdrop{
-    z-index: 0;
-}
 .note {
   margin: 0px 0px 5px;
   padding: 5px 7px 7px 15px;
@@ -180,12 +169,6 @@ ul li {
 .note-success {
   background-color: #ebfcee;
   border-color: #3cc051;
-}
-.notifications{
-    position: absolute;
-    width: 100%;
-    top: 92px;
-    text-align: right;
 }
 .span-post-icon {
   margin-left: 20px;
